@@ -8,10 +8,10 @@
 import Foundation
 
 public struct FINDProfile: Decodable, Hashable {
-    var findName: String
-    var name: String
-    var description: String
-    var tags: [String]
-    var avatar: String
-    var links: [String]
+    public var findName: String
+    public var name: String
+    public var description: String
+    public var tags: [String]
+    public var avatar: String
+    public var links: [String]
 }
