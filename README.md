@@ -1,6 +1,6 @@
 # FindSwiftSDK
 
-SDK For Integrating with Find on Flow in iOS Apps
+Swift SDK For Integrating with Find on Flow in iOS Apps
 
 ## Features
 
