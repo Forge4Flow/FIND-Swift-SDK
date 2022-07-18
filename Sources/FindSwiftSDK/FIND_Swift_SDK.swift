@@ -7,25 +7,27 @@ import CryptoKit
 
 public let find = FIND_Swift_SDK.shared
 
-public class FIND_Swift_SDK {
+public class FIND_Swift_SDK: ObservableObject {
     public static let shared = FIND_Swift_SDK()
-    public var profile: FINDProfile?
+    @Published public var profile: FINDProfile?
 
     public init() {
+        checkFindProfile()
+    }
+
+    public func checkFindProfile() {
+//        if fcl.currentUser != nil {
+//            if fcl.currentUser!.loggedIn {
+//                self.profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)
+//
+//            }
+//        }
+        
         fcl.$currentUser.sink { _ in
             Task.detached {
                 print("Checking Profile")
                 
                 self.profile = await self.reverseLookupProfile(address: fcl.currentUser?.addr.hex ?? "")
-            }
-        }
-    }
-
-    public func checkFindProfile() async {
-        if fcl.currentUser != nil {
-            if fcl.currentUser!.loggedIn {
-                self.profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)
-                
             }
         }
     }
