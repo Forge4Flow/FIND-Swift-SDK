@@ -18,13 +18,15 @@ public class FIND_Swift_SDK {
     public func checkFindProfile() async {
         if fcl.currentUser != nil {
             if fcl.currentUser!.loggedIn {
-                let profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)
-                print(profile)
-            }
+                let profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)            }
         }
+        
+//        fcl.$currentUser.sink { user in
+//            let profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)
+//        }
     }
 
-    public func reverseLookupProfile(address: String) async -> String {
+    public func reverseLookupProfile(address: String) async -> FINDProfile? {
         do {
             let block = try await fcl.query {
                 cadence {
@@ -35,14 +37,14 @@ public class FIND_Swift_SDK {
                     [.address(Flow.Address(hex: address))]
                 }
             }.decode(FINDProfile.self)
-            await MainActor.run {
-                self.profile = block
-            }
+//            await MainActor.run {
+//                async let profile = block!
+//            }
 
-            return ""
+            return block
         } catch {
             print(error)
-            return ""
+            return nil
         }
     }
 
