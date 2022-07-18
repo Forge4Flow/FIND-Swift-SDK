@@ -12,19 +12,18 @@ public class FIND_Swift_SDK {
     public var profile: FINDProfile?
 
     public init() {
-
-    }
-
-    public func checkFindProfile() async {
-//        if fcl.currentUser != nil {
-//            if fcl.currentUser!.loggedIn {
-//                let profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)            }
-//        }
-        
         fcl.$currentUser.sink { _ in
+            print("Checking Profile")
             Task.detached {
                 self.profile = await self.reverseLookupProfile(address: fcl.currentUser!.addr.hex)
             }
+        }
+    }
+
+    public func checkFindProfile() async {
+        if fcl.currentUser != nil {
+            if fcl.currentUser!.loggedIn {
+                self.profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)            }
         }
     }
 
