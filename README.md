@@ -43,7 +43,20 @@ let findProfile = find.reverseLookupProfile(address: '0x1234567890')
 
 #### Using the current users FIND Name & Profile
 
-Upon login the current users FIND Name & Profile will loaded into the `find.profile` variable. Since this is a @Published variable you can utlize directly inside SwiftUI as shown below.
+Upon login the current users FIND Name & Profile will loaded into the `find.profile` variable.
+
+```Swift
+public struct FINDProfile: Decodable, Hashable {
+    public var findName: String
+    public var name: String
+    public var description: String
+    public var tags: [String]
+    public var avatar: String
+    public var links: [String]
+}
+```
+
+Since this is a @Published variable you can utlize directly inside SwiftUI as shown below.
 
 ```Swift
 if find.profile?.avatar != nil {
