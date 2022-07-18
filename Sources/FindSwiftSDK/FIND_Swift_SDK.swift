@@ -36,9 +36,6 @@ public class FIND_Swift_SDK: ObservableObject {
                     [.address(Flow.Address(hex: address))]
                 }
             }.decode(FINDProfile.self)
-//            await MainActor.run {
-//                async let profile = block!
-//            }
 
             return block
         } catch {
@@ -54,11 +51,8 @@ public class FIND_Swift_SDK: ObservableObject {
                     FindScripts.reverseLookupFIND.rawValue
                 }
             }.decode()
-            await MainActor.run {
-                print(block)
-            }
 
-            return ""
+            return block as? String ?? ""
         } catch {
             print(error)
             return ""
