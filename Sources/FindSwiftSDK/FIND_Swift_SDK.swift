@@ -16,13 +16,6 @@ public class FIND_Swift_SDK: ObservableObject {
     }
 
     public func checkFindProfile() {
-//        if fcl.currentUser != nil {
-//            if fcl.currentUser!.loggedIn {
-//                self.profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)
-//
-//            }
-//        }
-        
         fcl.$currentUser.sink { user in
             Task.detached {
                 print("Checking Profile")
