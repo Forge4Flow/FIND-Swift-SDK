@@ -10,7 +10,7 @@ public let find = FIND_Swift_SDK.shared
 public class FIND_Swift_SDK: ObservableObject {
     public static let shared = FIND_Swift_SDK()
     @Published public var profile: FINDProfile?
-    
+
     private var cancellables = Set<AnyCancellable>()
 
     public init() {
