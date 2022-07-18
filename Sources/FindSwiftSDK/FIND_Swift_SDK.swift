@@ -23,11 +23,11 @@ public class FIND_Swift_SDK: ObservableObject {
 //            }
 //        }
         
-        fcl.$currentUser.sink { _ in
+        fcl.$currentUser.sink { user in
             Task.detached {
                 print("Checking Profile")
                 
-                self.profile = await self.reverseLookupProfile(address: fcl.currentUser?.addr.hex ?? "")
+                self.profile = await self.reverseLookupProfile(address: user?.addr.hex ?? "")
             }
         }
     }
