@@ -7,24 +7,29 @@ import CryptoKit
 
 public let find = FIND_Swift_SDK.shared
 
-public class FIND_Swift_SDK {
+public class FIND_Swift_SDK: ObservableObject {
     public static let shared = FIND_Swift_SDK()
-    public var profile: FINDProfile?
+    @Published public var profile: FINDProfile?
+
+    private var cancellables = Set<AnyCancellable>()
 
     public init() {
-
+        fcl.$currentUser.sink { user in
+            if user != nil {
+                self.checkFindProfile()
+            }
+        }.store(in: &cancellables)
     }
 
-    public func checkFindProfile() async {
-        if fcl.currentUser != nil {
-            if fcl.currentUser!.loggedIn {
-                let profile = await reverseLookupProfile(address: fcl.currentUser!.addr.hex)
-                print(profile)
-            }
+    public func checkFindProfile() {
+        Task.detached {
+            print("Checking Profile")
+
+            self.profile = await self.reverseLookupProfile(address: fcl.currentUser?.addr.hex ?? "")
         }
     }
 
-    public func reverseLookupProfile(address: String) async -> String {
+    public func reverseLookupProfile(address: String) async -> FINDProfile? {
         do {
             let block = try await fcl.query {
                 cadence {
@@ -35,14 +40,11 @@ public class FIND_Swift_SDK {
                     [.address(Flow.Address(hex: address))]
                 }
             }.decode(FINDProfile.self)
-            await MainActor.run {
-                self.profile = block
-            }
 
-            return ""
+            return block
         } catch {
             print(error)
-            return ""
+            return nil
         }
     }
 
@@ -53,11 +55,8 @@ public class FIND_Swift_SDK {
                     FindScripts.reverseLookupFIND.rawValue
                 }
             }.decode()
-            await MainActor.run {
-                print(block)
-            }
 
-            return ""
+            return block as? String ?? ""
         } catch {
             print(error)
             return ""
