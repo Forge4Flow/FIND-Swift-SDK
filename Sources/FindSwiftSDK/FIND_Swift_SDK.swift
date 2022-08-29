@@ -5,7 +5,7 @@ import Flow
 import BigInt
 import CryptoKit
 
-public let find = FIND_Swift_SDK.shared
+public let sharedFind = FIND_Swift_SDK.shared
 
 public class FIND_Swift_SDK: ObservableObject {
     public static let shared = FIND_Swift_SDK()
@@ -16,16 +16,18 @@ public class FIND_Swift_SDK: ObservableObject {
     public init() {
         fcl.$currentUser.sink { user in
             if user != nil {
-                self.checkFindProfile()
+                self.checkFindProfile() 
             }
         }.store(in: &cancellables)
     }
 
     public func checkFindProfile() {
         Task.detached {
-            print("Checking Profile")
-
-            self.profile = await self.reverseLookupProfile(address: fcl.currentUser?.addr.hex ?? "")
+            let findProfile = await self.reverseLookupProfile(address: fcl.currentUser?.addr.hex ?? "")
+            
+            await MainActor.run {
+                self.profile = findProfile
+            }
         }
     }
 
