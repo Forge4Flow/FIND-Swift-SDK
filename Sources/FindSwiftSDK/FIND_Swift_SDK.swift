@@ -15,15 +15,17 @@ public class FIND_Swift_SDK: ObservableObject {
 
     public init() {
         fcl.$currentUser.sink { user in
-            if user != nil {
-                self.checkFindProfile() 
+            guard let userInfo = user else {
+                return
             }
+            
+            self.checkFindProfile(addr: userInfo.addr.hex)
         }.store(in: &cancellables)
     }
 
-    public func checkFindProfile() {
+    public func checkFindProfile(addr: String) {
         Task.detached {
-            let findProfile = await self.reverseLookupProfile(address: fcl.currentUser?.addr.hex ?? "")
+            let findProfile = await self.reverseLookupProfile(address: addr)
             
             await MainActor.run {
                 self.profile = findProfile
